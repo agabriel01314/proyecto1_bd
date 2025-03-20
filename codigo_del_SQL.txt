@@ -1,0 +1,46 @@
+Select current_database();
+
+CREATE TABLE Roles_Usuarios (
+    id SERIAL PRIMARY KEY,
+    nombre_rol VARCHAR(50) NOT NULL,
+    descripcion_rol TEXT,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    fecha_modificacion TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+
+CREATE TABLE Usuario (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    contraseña VARCHAR(255) NOT NULL,
+    id_Roles_Usuarios INTEGER NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    fecha_modificacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (id_Roles_Usuarios) REFERENCES Roles_Usuarios(id)
+);
+
+
+
+CREATE TABLE Cliente (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    direccion VARCHAR(255) NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
+    estado BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
+CREATE TABLE Proveedor (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    contacto VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    telefono VARCHAR(15),
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
+    estado BOOLEAN NOT NULL DEFAULT TRUE
+);
