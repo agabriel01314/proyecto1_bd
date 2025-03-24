@@ -45,4 +45,37 @@ CREATE TABLE Proveedor (
     estado BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE TABLE Pedido_Detalle (
+ id SERIAL PRIMARY KEY,
+ id_pedido_maestro INTEGER NOT NULL,
+ id_producto INTEGER NOT NULL,
+ cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+ precio DECIMAL(10,2) NOT NULL,
+ descuento DECIMAL(10,2) DEFAULT 0,
+ FOREIGN KEY (id_pedido_maestro) REFERENCES Pedido_Maestro(id),
+ FOREIGN KEY (id_producto) REFERENCES Producto(id)
+);
+
+CREATE TABLE Factura_Maestro (
+ id SERIAL PRIMARY KEY,
+ id_pedido INTEGER NOT NULL,
+ numero_factura VARCHAR(50) UNIQUE,
+ fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+ total DECIMAL(10,2) NOT NULL,
+ impuesto DECIMAL(10,2) DEFAULT 0,
+ descuento DECIMAL(10,2) DEFAULT 0,
+ FOREIGN KEY (id_pedido) REFERENCES Pedido_Maestro(id)
+);
+
+CREATE TABLE Factura_Detalle (
+ id SERIAL PRIMARY KEY,
+ id_factura_maestro INTEGER NOT NULL,
+ id_producto INTEGER NOT NULL,
+ cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+ precio_unitario DECIMAL(10,2) NOT NULL,
+ FOREIGN KEY (id_factura_maestro) REFERENCES Factura_Maestro(id),
+ FOREIGN KEY (id_producto) REFERENCES Producto(id)
+);
+
+
 -- comentario de edición.
