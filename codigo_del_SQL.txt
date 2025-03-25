@@ -78,4 +78,74 @@ CREATE TABLE Factura_Detalle (
 );
 
 
+CREATE TABLE Categoria_Producto (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    estado BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
+CREATE TABLE Producto (
+    id SERIAL PRIMARY KEY,
+    codigo VARCHAR(50) UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INTEGER NOT NULL CHECK (stock >= 0),
+    id_Proveedor INTEGER NOT NULL,
+    id_Categoria INTEGER NOT NULL,
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
+    estado BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (id_Proveedor) REFERENCES Proveedor(id),
+    FOREIGN KEY (id_Categoria) REFERENCES Categoria_Producto(id)
+);
+
+
+
+CREATE TABLE Material (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    unidad_medida VARCHAR(20),
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+
+
+CREATE TABLE Material_Producto (
+    id_producto INTEGER NOT NULL,
+    id_material INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+    PRIMARY KEY (id_producto, id_material),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id),
+    FOREIGN KEY (id_material) REFERENCES Material(id)
+);
+
+
+
+CREATE TABLE Orden_Produccion (
+    id SERIAL PRIMARY KEY,
+    id_producto INTEGER NOT NULL,
+    fecha_inicio TIMESTAMP NOT NULL DEFAULT NOW(),
+    fecha_fin TIMESTAMP,
+    cantidad INTEGER NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    comentarios TEXT,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id)
+);
+
+
+
+CREATE TABLE Material_OrdenProduccion (
+    id_orden_produccion INTEGER NOT NULL,
+    id_material INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+    PRIMARY KEY (id_orden_produccion, id_material),
+    FOREIGN KEY (id_orden_produccion) REFERENCES Orden_Produccion(id),
+    FOREIGN KEY (id_material) REFERENCES Material(id)
+);
+
+
 -- comentario de edición.
