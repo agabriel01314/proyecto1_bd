@@ -148,4 +148,62 @@ CREATE TABLE Material_OrdenProduccion (
 );
 
 
--- comentario de edición.
+--complemento de tablas-- 
+
+CREATE TABLE Inventario (
+    id SERIAL PRIMARY KEY,
+    id_producto INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL CHECK (cantidad >= 0),
+    ubicacion VARCHAR(100) NOT NULL,
+    ultima_actualizacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id)
+);
+
+
+
+CREATE TABLE Pedido_Maestro (
+    id SERIAL PRIMARY KEY,
+    id_cliente INTEGER NOT NULL,
+    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
+    total DECIMAL(10,2) NOT NULL,
+    direccion_envio VARCHAR(255),
+    estado_pedido VARCHAR(50) NOT NULL DEFAULT 'Pendiente',
+    FOREIGN KEY (id_cliente) REFERENCES Cliente(id)
+);
+
+
+
+CREATE TABLE Historial_Pedido (
+    id SERIAL PRIMARY KEY,
+    id_pedido INTEGER NOT NULL,
+    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
+    estado VARCHAR(50) NOT NULL,
+    comentarios TEXT,
+    FOREIGN KEY (id_pedido) REFERENCES Pedido_Maestro(id)
+);
+
+CREATE TABLE Contabilidad (
+    id SERIAL PRIMARY KEY,
+    fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+    tipo VARCHAR(50) NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    descripcion TEXT NOT NULL,
+    referencia VARCHAR(100)
+);
+
+
+CREATE TABLE Bitacora (
+    id SERIAL PRIMARY KEY,
+    id_usuario INTEGER NOT NULL,
+    accion TEXT NOT NULL,
+    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
+    ip_usuario VARCHAR(45),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
+);
+
+CREATE TABLE Metodo_Pago (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT TRUE
+);
